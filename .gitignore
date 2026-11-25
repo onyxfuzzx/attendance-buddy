@@ -2,7 +2,7 @@
 **/desktop.ini
 **/Desktop.ini
 **/Thumbs.db
-
+/Reference
 # IDE / Editor
 **/.vs/
 **/.vscode/
