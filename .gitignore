@@ -30,3 +30,11 @@ yarn-error.log*
 # Environment files
 .env
 .env.local
+.env.*.local
+.npm-cache/
+coverage/
+playwright-report/
+test-results/
+frontend/*.tsbuildinfo
+artifacts/
+backend/.seed-accounts.json

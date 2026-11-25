@@ -1,0 +1,9 @@
+Reference/
+WatchmanAttendance.API/
+WatchmanAttendance.UI/
+node_modules/
+.npm-cache/
+**/dist/
+**/package-lock.json
+artifacts/
+test-results/

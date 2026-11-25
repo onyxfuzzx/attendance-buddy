@@ -1,440 +1,163 @@
-# QR Watchman Attendance System
+﻿# Attendance Buddy
 
-> A full-stack QR-based attendance system for security guards and watchmen — with geofence validation, face capture, shift management, and an admin portal.
+**Your team, in sync.** A React and TypeScript attendance workspace for teams of every kind, with an Express API and Supabase Auth, PostgreSQL, and private Storage.
 
+This is the new primary application. The original Angular/.NET implementation remains in `WatchmanAttendance.UI/` and `WatchmanAttendance.API/` for migration reference. Root npm commands build and run the new application only. `Reference/` remains untouched and ignored by Git.
 
+## Run it
 
+Requires Node.js 22.12+ (Node 24 recommended) and npm.
 
-![Angular](https://img.shields.io/badge/Angular-17-DD0031?logo=angular&logoColor=white)
-![.NET](https://img.shields.io/badge/.NET-8-512BD4?logo=dotnet&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3-06B6D4?logo=tailwindcss&logoColor=white)
-![SQL Server](https://img.shields.io/badge/SQL%20Server-2019-CC2927?logo=microsoftsqlserver&logoColor=white)
-
----
-
-## Table of Contents
-
-- [How It Works](#how-it-works)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [Prerequisites](#prerequisites)
-- [Local Development](#local-development)
-- [Build](#build)
-- [Deployment](#deployment)
-  - [Backend — Azure App Service](#backend--azure-app-service)
-  - [Frontend — Cloudflare Pages](#frontend--cloudflare-pages)
-  - [Optional — Cloudflare Worker Proxy](#optional--cloudflare-worker-proxy)
-  - [Frontend — Azure Static Web Apps (alternative)](#frontend--azure-static-web-apps-alternative)
-- [Production Checklist](#production-checklist)
-- [Troubleshooting](#troubleshooting)
-
----
-
-## Google Maps API Key Setup
-
-This project uses the Google Maps JavaScript API.  
-You must provide your own API key.
-
-1. Go to Google Cloud Console
-2. Create a Google Maps JavaScript API key
-3. Replace the API key in the following 
-file:
-```bash
-WatchmanAttendance.UI/src/index.html
+```powershell
+npm ci
+npm run dev
 ```
 
-line:
-```bash
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&loading=async"></script>
-```
----
+Open **http://127.0.0.1:5173** and select **Explore the demo workspace**. The API runs at **http://127.0.0.1:3001**; `/api/health` is public.
 
-## How It Works
+Demo mode works without credentials. It uses sample people, attendance, and shifts, and saves edits in this browser's local storage. Location and shift verification are simulated in demo mode; live records are verified in PostgreSQL. Reset the sample data in Settings. Signing out exits the demo.
 
-```
-Admin creates QR location
-        │
-        ▼
-Watchman scans QR code (mobile browser)
-        │
-        ▼
-API validates QR token + geofence radius
-        │
-        ▼
-Watchman logs in (if not already authenticated)
-        │
-        ▼
-Watchman captures face photo + GPS position
-        │
-        ▼
-API records attendance log
-        │
-        ▼
-Admin views records, approves requests, audits logs
-```
+## Connect Supabase
 
----
+1. Create a fresh Supabase project. In its SQL editor, run `supabase/migrations/202611250001_attendance_buddy.sql` once. It creates the schema, authorization policies, transactional functions, audit triggers, and private `attendance-photos` storage bucket.
+2. Copy the environment examples:
 
-## Features
+   ```powershell
+   Copy-Item frontend/.env.example frontend/.env
+   Copy-Item backend/.env.example backend/.env
+   ```
 
-### Admin
-| Feature | Description |
-|---|---|
-| Watchman management | Create, view, and manage watchman accounts |
-| QR locations | Generate QR codes pinned to GPS locations with configurable radius |
-| Attendance records | View, filter, and delete attendance logs |
-| Attendance requests | Review and approve/reject correction requests |
-| Shift management | Assign and manage watchman shifts |
-| Audit logs | Full audit trail of admin actions |
+3. Set the same Supabase project URL and **publishable/anon key** in both files. The frontend variables start with `VITE_`. **A service-role key is not needed and must never be placed in the frontend.** The API forwards each verified user's JWT to Supabase so database authorization stays active.
+4. In Supabase Authentication, enable email/password sign-in. Set the Site URL to `http://127.0.0.1:5173` for local development and allow that URL, including invitation query parameters, as a redirect URL. Configure your production HTTPS origin before deployment. Keep email confirmation enabled and configure SMTP for reliable confirmation and password-reset delivery.
+5. Restart `npm run dev`, sign out of demo if necessary, and create your account. Confirm the email, then create your workspace. The creator becomes its administrator. The timezone controls attendance dates, shift rules, and reporting.
+6. Add a workplace with its real coordinates. Create a shift, pick its days and assign teammates. Invite teammates from Team, then copy and share each invitation link. Invitations **do not send email** automatically; they expire after seven days and are tied to the invited email address. Withdraw an expired invitation before issuing another to the same person.
+7. Teammates sign up using their invited email, confirm it, and join with the invitation code. Display the workplace QR at the entrance. Employees scan or paste the workplace code, verify GPS, optionally capture a photo, and confirm check-in or check-out.
 
-### Watchman
-| Feature | Description |
-|---|---|
-| QR scan | Scan a QR code to start the attendance flow |
-| Geofence check | Location validated against the QR pin radius |
-| Face capture | Take a photo as part of the attendance record |
-| Dashboard | View personal attendance history |
-| Requests | Submit correction requests and track their status |
+The migration is intended for a **new Supabase project**, not as an in-place SQL Server conversion. It does not import historical .NET/SQL Server records. Never run the old `sql/setup.sql` against PostgreSQL.
 
----
+## Load test data into Supabase
 
-## Tech Stack
+After the migration is applied, add `SUPABASE_SERVICE_ROLE_KEY` to `backend/.env` using a server-only Supabase secret/service-role key. This key is used only by the seed command; the application continues to use the public key and each user's session.
 
-| Layer | Technology |
-|---|---|
-| Backend | ASP.NET Core Web API (.NET 8), Dapper, JWT |
-| Database | SQL Server / Azure SQL |
-| Frontend | Angular 17, TypeScript, Tailwind CSS |
-| Maps | Google Maps JavaScript API |
-| Hosting (recommended) | Azure App Service + Cloudflare Pages |
-
----
-
-## Project Structure
-
-```
-QR-Watchman-Attendance-System/
-├── WatchmanAttendance.API/       # ASP.NET Core Web API
-│   ├── Controllers/              # API endpoints
-│   ├── DTOs/                     # Request/response models
-│   ├── Models/                   # Domain models
-│   ├── Repositories/             # Data access (Dapper)
-│   ├── Services/                 # JWT, geo, timezone helpers
-│   ├── appsettings.json          # Configuration
-│   └── Program.cs                # App setup, CORS, middleware
-│
-└── WatchmanAttendance.UI/        # Angular 17 frontend
-    └── src/app/
-        ├── admin/                # Admin dashboard
-        ├── auth/                 # Login pages
-        ├── watchman/             # Watchman dashboard, QR scan, attendance
-        ├── config/app-config.ts  # API URL config
-        └── app.routes.ts         # Routing
+```powershell
+npm run seed:test
 ```
 
----
+The seed creates an isolated **Attendance Buddy Test Lab** workspace with 8 confirmed test accounts (2 admins, 5 active employees, and 1 inactive employee), 3 workplaces, 5 shifts including overnight and paused schedules, approximately 3 weeks of attendance, pending/approved/rejected corrections, invitations, and audit events. The Admin API confirms these test accounts without sending email.
 
-## Prerequisites
+Random test passwords are saved in **`backend/.seed-accounts.json`**, which is excluded from Git and Docker. Use Alex's account for the admin view or Priya's for the employee view. Sign out of the browser demo before signing in. An inactive test account intentionally cannot enter the workspace.
 
-- [.NET 8 SDK](https://dotnet.microsoft.com/download)
-- [Node.js 18+](https://nodejs.org/) and npm
-- SQL Server or SQL Server Express
-- A Google Maps API key (for the map picker)
-- *(optional)* Azure account for deployment
-- *(optional)* Cloudflare account for Pages / Workers
+Reruns reuse seed identities and the original sample dates, inserting only missing fixture rows; they do not reset passwords or overwrite existing rows. Existing workspaces and non-fixture users are left alone. These records are labeled test data and use sample coordinates. For a real GPS check-in, create a workplace at your actual location and assign a matching current shift.
 
----
+## The flow
 
-## Local Development
+- **Overview:** today's check-ins, late arrivals, a seven-day chart, active shifts, and recent attendance.
+- **Attendance:** date, person, status, and workplace filters; pagination; CSV export of the filtered records; private photo access; and correction requests for your own records.
+- **Team:** email-bound invitations, withdrawal, and reversible deactivation. Administrator accounts cannot be deactivated through the employee endpoint.
+- **Locations:** GPS coordinates, configurable 20–2,000m boundary, printable SVG QR, and pause/resume.
+- **Shifts:** recurring weekday schedules, bulk member assignment, overnight shifts, and pause/resume. Schedules are immutable: pause an old shift and create its replacement to preserve historical shift rules. Open check-ins may still check out against their original paused shift.
+- **Requests:** pending/approved/rejected views, review notes, and transactional approval. Approval updates the record while retaining the original time and audit details. An administrator cannot approve their own request.
+- **Reports:** completed work hours, person-days, late check-ins, on-time percentages, summary CSV, and an administrator-only audit trail.
+- **Settings:** profile updates, password changes, workspace details, and demo reset. Sign-in also supports password recovery.
 
-### 1. Clone the repository
+The employee view contains only the employee's own profile, attendance, corrections and shift assignments. Administrator-only navigation is hidden. The API and database enforce permissions independently of the interface.
 
-```bash
-git clone https://github.com/your-username/QR-Watchman-Attendance-System.git
-cd QR-Watchman-Attendance-System
+## Attendance rules
+
+- The browser supplies the workplace token, coordinates, accuracy, and intended action. The database supplies identity, workspace, timestamp, shift, distance, and resulting status.
+- A signed-in, active member must be assigned to an active shift at the active workplace. Check-in opens two hours before a shift and closes at shift end.
+- PostgreSQL calculates Haversine distance. The location must fall inside the configured radius, with reported GPS accuracy of 100m or better.
+- Check-ins receive 15 minutes of grace. Later arrivals are marked late. Check-outs before shift end are marked early.
+- Attendance actions alternate in/out; check-out must use the original workplace. A member row lock serializes writes, and a 30-second cooldown blocks rapid repeats.
+- Overnight schedules retain the starting weekday and wrap the end time onto the next local date.
+- Corrections must refer to your own record, be within the past 60 days, stay on the original local date, and preserve the surrounding attendance sequence. Only one pending correction per record is permitted. Approval and record modification happen in one database transaction.
+- Photos are optional JPEG/PNG/WebP files up to 2MB in a private bucket. Storage policies restrict paths and visibility; viewing uses a 60-second signed URL. Photos are evidence capture, not face recognition. GPS is recorded at attendance actions only, with no background tracking.
+
+Browser coordinates can be spoofed on a controlled device. QR + GPS is a presence check, not a guarantee against device-level tampering. Higher assurance would require managed devices or additional trusted hardware.
+
+## Architecture and source
+
+```text
+frontend/                 React 19 + TypeScript + Vite; responsive custom CSS
+  src/App.tsx             Authentication, app shell, navigation and demo persistence
+  src/pages.tsx           Overview, attendance, team, shifts, locations, requests, reports, settings
+  src/forms.tsx           Validated dialogs, invitations, QR generation, private photo viewing
+  src/scanner.tsx         QR camera, GPS, optional photo and attendance flow
+  src/lib.ts              API client, Supabase client, date/export helpers and demo fixtures
+backend/                  Node.js + Express 5 + TypeScript + Zod
+  src/app.ts              Verified authentication, role checks, validation, rate limits and routes
+  test/                   API and embedded PostgreSQL integration tests
+supabase/migrations/      Schema, RLS, storage policies, transactional RPCs and audit triggers
+tests/                    Playwright browser regression tests
+.github/workflows/ci.yml   Build, backend tests and Chromium UI tests
+Dockerfile                Multi-stage production image
 ```
 
-### 2. Set up the database
+The Node/Express/TypeScript backend matches the language and architecture in the supplied reference. Supabase replaces SQL Server and native Windows database drivers. Fonts are served locally. The QR decoding library loads only when the camera scanner is opened.
 
-Create an empty SQL Server database, then run the setup script:
+### API
 
-```bash
-sqlcmd -S localhost -d WatchmanAttendance -i sql/setup.sql
-```
+All endpoints except health require a Supabase bearer token. Administrative writes also require the current database profile to be an active administrator. Input schemas reject invalid IDs, coordinates, times, and request fields.
 
-Or open [sql/setup.sql](sql/setup.sql) in SQL Server Management Studio and execute it against your database.
+| Method       | Path                                   | Purpose                                 |
+| ------------ | -------------------------------------- | --------------------------------------- |
+| GET          | `/api/health`                          | Process status and configuration flag   |
+| GET          | `/api/workspace`                       | Role-scoped workspace data              |
+| POST         | `/api/onboarding`                      | Create your first workspace             |
+| POST         | `/api/join`                            | Accept an email-bound invitation        |
+| POST / PATCH | `/api/locations`, `/api/locations/:id` | Create / pause or activate workplace    |
+| POST / PATCH | `/api/shifts`, `/api/shifts/:id`       | Create assigned shift / pause or resume |
+| POST         | `/api/invitations`                     | Create invitation                       |
+| PATCH        | `/api/invitations/:id/revoke`          | Withdraw invitation                     |
+| PATCH        | `/api/members/:id`                     | Deactivate/reactivate employee          |
+| POST         | `/api/attendance/scan`                 | Atomic, verified attendance action      |
+| POST         | `/api/corrections`                     | Submit correction                       |
+| PATCH        | `/api/corrections/:id`                 | Review and optionally apply correction  |
+| PATCH        | `/api/profile`                         | Update permitted profile fields         |
 
-This script creates all tables and inserts the default admin account:
+Reads are protected by row-level security. Attendance, membership, shift, and review writes use narrowly scoped database functions with explicit identity/role checks and empty search paths. Anonymous access is revoked. Protected table updates and audit edits are not granted to application users. No service-role bypass is used. Security headers, allowed CORS origins, request-size limits and API rate limiting are configured in Express.
 
-| Field    | Value             |
-|----------|-------------------|
-| Username | `admin@surge.com` |
-| Password | `12345678`        |
+The workspace currently loads the latest **1,000 attendance records**, **200 correction requests** and **100 audit events**. Reports and exports operate on that loaded attendance window, which is labeled in the interface. For a large organization, add server-side paginated reporting or scheduled aggregates before relying on long-period reports. Weekly attendance uses current active assignments as its denominator; assignment history and leave calendars are not modeled. This app does not calculate payroll or leave balances.
 
-> **Change the admin password** after your first login in production.
+## Verification
 
-### 3. Configure the backend
-
-Edit `WatchmanAttendance.API/appsettings.json`:
-
-```json
-{
-  "ConnectionStrings": {
-    "Default": "Server=localhost;Database=WatchmanAttendance;Trusted_Connection=True;"
-  },
-  "Jwt": {
-    "Key": "your-secret-key-at-least-32-characters",
-    "Issuer": "WatchmanAttendanceAPI",
-    "Audience": "WatchmanAttendanceClient"
-  },
-  "Frontend": {
-    "BaseUrl": "http://localhost:4200"
-  }
-}
-```
-
-> **Never commit real secrets.** Use `appsettings.Development.json` locally and environment variables in production.
-
-### 4. Run the API
-
-```bash
-cd WatchmanAttendance.API
-dotnet restore
-dotnet run
-```
-
-API runs at:
-- HTTP: `http://localhost:5036`
-- Swagger: `http://localhost:5036/swagger`
-
-### 5. Configure the frontend
-
-Edit `WatchmanAttendance.UI/src/app/config/app-config.ts`:
-
-```ts
-export const AppConfig = {
-  apiUrl: 'http://localhost:5036/api',
-  baseUrl: 'http://localhost:5036',
-};
-```
-
-### 6. Run the frontend
-
-```bash
-cd WatchmanAttendance.UI
-npm install
-npx ng serve
-```
-
-Frontend runs at `http://localhost:4200`.
-
----
-
-## Build
-
-### Backend
-
-```bash
-cd WatchmanAttendance.API
-dotnet build -c Release
-```
-
-### Frontend
-
-```bash
-cd WatchmanAttendance.UI
+```powershell
 npm run build
+npm test
+npm run test:ui
+npm run supabase:check
 ```
 
-Output: `WatchmanAttendance.UI/dist/watchman-attendance-ui/browser/`
+UI tests use locally installed Google Chrome by default. If Chrome is unavailable, run `npx playwright install chromium` and use `CI=true` so the configuration selects bundled Chromium. CI installs Chromium automatically.
 
----
+The backend suite executes the migration and functions in **PGlite (embedded PostgreSQL)** with stubbed Supabase `auth` and `storage` schemas. It checks tenant isolation, privilege escalation, invitation ownership, invalid GPS, geofence rejection, shift assignment, duplicate scans, correction approval, overnight checkout and suspension. API tests verify health, closed-by-default configuration, anonymous denial, and input schemas.
 
-## Deployment
+Browser tests exercise the demo workspace: navigation, QR rendering, record filters, workplace/shift creation, invitations, persistence, corrections, CSV download, check-out, modal keyboard behavior, and mobile layout.
 
-Recommended production architecture:
+These tests do not substitute for a connected Supabase acceptance run. Auth email delivery, actual Storage uploads, real camera scanning/GPS on mobile, and Docker deployment must be checked against your configured project and environment.
 
-```
-Browser
-  │
-  ├── https://app.yourdomain.com  ──►  Cloudflare Pages  (Angular UI)
-  │
-  └── https://api.yourdomain.com  ──►  Cloudflare Worker (optional proxy)
-                                            │
-                                            ▼
-                                     Azure App Service  (.NET API)
-                                            │
-                                            ▼
-                                       Azure SQL Database
-```
+## Production
 
----
+For a single service, build the frontend and API, then let Express serve both:
 
-### Backend — Azure App Service
-
-**1. Publish the API**
-
-```bash
-cd WatchmanAttendance.API
-dotnet publish -c Release -o ./publish
-```
-
-**2. Create Azure resources**
-
-- App Service Plan (Linux or Windows, .NET 8 runtime)
-- Web App
-- Azure SQL Database (or connect to an existing SQL Server)
-
-**3. Set App Service configuration**
-
-Add these as **Application Settings** in the Azure Portal (or via Azure CLI):
-
-| Setting | Value |
-|---|---|
-| `ConnectionStrings__Default` | Your Azure SQL connection string |
-| `Jwt__Key` | A strong random secret (32+ characters) |
-| `Jwt__Issuer` | `WatchmanAttendanceAPI` |
-| `Jwt__Audience` | `WatchmanAttendanceClient` |
-| `Frontend__BaseUrl` | Your production frontend URL |
-
-**4. Update CORS**
-
-In `WatchmanAttendance.API/Program.cs`, add your production frontend domain to `WithOrigins(...)`:
-
-```csharp
-policy.WithOrigins(
-    "http://localhost:4200",
-    "https://your-frontend.pages.dev",
-    "https://app.yourdomain.com"
-)
-```
-
-**5. Deploy**
-
-Deploy the `publish/` folder using any of:
-- Azure CLI: `az webapp deploy`
-- Visual Studio publish profile
-- GitHub Actions (zip deploy)
-
----
-
-### Frontend — Cloudflare Pages
-
-**1. Update the API URL**
-
-In `WatchmanAttendance.UI/src/app/config/app-config.ts`:
-
-```ts
-export const AppConfig = {
-  apiUrl: 'https://your-api.azurewebsites.net/api',
-  baseUrl: 'https://your-api.azurewebsites.net',
-};
-```
-
-**2. Build**
-
-```bash
-cd WatchmanAttendance.UI
-npm install
+```powershell
+npm ci
 npm run build
+$env:NODE_ENV = 'production'
+npm start
 ```
 
-**3. Create a Cloudflare Pages project**
+Set `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `FRONTEND_ORIGIN`, and optionally `PORT` and `HOST` in the process environment. The frontend's `VITE_` variables are embedded at **build time**, so configure `frontend/.env` or build environment before building. Do not embed private keys.
 
-In the Cloudflare dashboard, create a new Pages project with:
+The server listens on `0.0.0.0` in production. Terminate TLS at your hosting platform or reverse proxy. Set `TRUST_PROXY_HOPS` to the exact number of trusted proxies only if your hosting topology requires it. Use one API instance for the in-memory rate limiter, or replace it with a shared store for multiple instances. Health checks do not validate remote Supabase availability.
 
-| Setting | Value |
-|---|---|
-| Framework preset | None (or Angular) |
-| Build command | `npm run build` |
-| Build output directory | `dist/watchman-attendance-ui/browser` |
+Alternatively, build the included Docker image:
 
-**4. Fix Angular client-side routing**
-
-Add a `_redirects` file inside `WatchmanAttendance.UI/src/` (and make sure it gets copied to the build output, or add it directly to `dist/…/browser/` after build):
-
-```
-/*    /index.html    200
+```powershell
+docker build --build-arg VITE_SUPABASE_URL=https://YOUR_PROJECT.supabase.co --build-arg VITE_SUPABASE_ANON_KEY=YOUR_PUBLISHABLE_KEY -t attendance-buddy .
+docker run --env-file backend/.env -e NODE_ENV=production -p 3001:3001 attendance-buddy
 ```
 
-This prevents `/login`, `/scan/:token`, and other Angular routes from returning 404 on page refresh.
+Use HTTPS for production camera/GPS access. Update Supabase Site URL and allowed redirect URLs to your production origin. Confirm sign-up, invite acceptance, in/out, correction review, and private photo access with an admin and an employee from two separate workspaces before going live.
 
-Alternatively, enable the "Single Page Application" fallback in the Cloudflare Pages settings.
-
----
-
-### Optional — Cloudflare Worker Proxy
-
-Use a Cloudflare Worker to expose the Azure API under a custom domain (e.g. `api.yourdomain.com`).
-
-**Example Worker script:**
-
-```js
-export default {
-  async fetch(request) {
-    const url = new URL(request.url);
-    url.hostname = 'your-api.azurewebsites.net';
-    return fetch(new Request(url.toString(), request));
-  }
-};
-```
-
-Then update `app-config.ts`:
-
-```ts
-export const AppConfig = {
-  apiUrl: 'https://api.yourdomain.com/api',
-  baseUrl: 'https://api.yourdomain.com',
-};
-```
-
-> Cloudflare Workers cannot host an ASP.NET Core app directly. Use Workers as a proxy in front of your Azure App Service only.
-
----
-
-### Frontend — Azure Static Web Apps (alternative)
-
-If you prefer to stay entirely on Azure:
-
-1. Create an **Azure Static Web Apps** resource.
-2. Set the build output to `dist/watchman-attendance-ui/browser`.
-3. Azure Static Web Apps handles SPA routing automatically via its built-in fallback.
-
----
-
-## Production Checklist
-
-- [ ] Replace the default JWT secret with a strong random value
-- [ ] Change the default admin password (`admin@surge.com` / `12345678`) immediately
-- [ ] Store all secrets in Azure App Settings, not in source code
-- [ ] Add your production frontend domain to CORS `WithOrigins(...)`
-- [ ] Point `app-config.ts` to the production API URL
-- [ ] Restrict your Google Maps API key to your production domain
-- [ ] Add Google Maps Api Url in /WatchmanAttendance.UI/src/index.html
-- [ ] Verify SQL Server is accessible from Azure App Service
-- [ ] Deploy frontend over **HTTPS** (required for camera and GPS on mobile)
-- [ ] Deploy backend over **HTTPS**
-- [ ] Test the full QR scan → login → attendance flow on a real mobile device
-- [ ] Configure SPA fallback (`_redirects` or platform setting) for Angular routing
-- [ ] Ensure the `Uploads/` folder (or equivalent) is on persistent storage
-
----
-
-## Troubleshooting
-
-**QR opens but asks for login**
-Expected. If the watchman is not signed in, the app redirects to login and then continues to the attendance flow automatically after login.
-
-**Camera or GPS not working in production**
-Both APIs require HTTPS. Make sure your frontend and backend are both deployed with valid TLS certificates.
-
-**Angular route returns 404 on page refresh**
-You need a SPA fallback. Add a `_redirects` file on Cloudflare Pages or enable the SPA fallback on Azure Static Web Apps.
-
-**API blocked by CORS**
-Add your deployed frontend URL to `WithOrigins(...)` in `Program.cs` and redeploy the API.
-
-**`Cloudflare Worker cannot host the .NET API`**
-Correct — Workers run JavaScript/WASM at the edge. Use Workers as a reverse proxy in front of your Azure App Service, not as the API host.
+The old Angular/.NET publish profiles and SQL Server instructions apply only to the archived implementation.

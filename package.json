@@ -1,0 +1,23 @@
+{
+  "name": "attendance-buddy",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "concurrently -n api,web -c cyan,magenta \"npm run dev -w backend\" \"npm run dev -w frontend\"",
+    "build": "npm run build -w backend && npm run build -w frontend",
+    "test": "npm run test -w backend",
+    "test:ui": "playwright test",
+    "supabase:check": "node scripts/check-supabase.mjs",
+    "seed:test": "node scripts/seed-supabase.mjs",
+    "start": "npm run start -w backend"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.1",
+    "concurrently": "^9.2.1",
+    "prettier": "^3.10.1"
+  }
+}

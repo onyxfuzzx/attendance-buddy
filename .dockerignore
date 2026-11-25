@@ -1,0 +1,14 @@
+node_modules
+**/node_modules
+**/dist
+**/.env
+**/.env.*.local
+.git
+.npm-cache
+Reference
+WatchmanAttendance.API
+WatchmanAttendance.UI
+test-results
+artifacts
+*.pdf
+**/.seed-accounts.json
