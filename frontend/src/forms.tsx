@@ -358,7 +358,7 @@ export function Forms({
                   required
                 />
                 <small>
-                  Team members must be inside this boundary. Choose 20–2,000 meters.
+                  Team members must be inside this boundary. Choose a radius from 20 to 2,000 meters.
                 </small>
               </label>
             </>

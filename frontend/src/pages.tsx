@@ -401,7 +401,7 @@ export function Overview() {
                               </div>
                             </div>
                           </td>
-                          <td>{record ? time(record.occurred_at, tz) : "—"}</td>
+                          <td>{record ? time(record.occurred_at, tz) : "-"}</td>
                           <td>
                             <Badge
                               tone={
@@ -423,7 +423,7 @@ export function Overview() {
                             <span className="location-cell">
                               <MapPin size={13} />
                               {data.locations.find((l) => l.id === record?.location_id)
-                                ?.name || "—"}
+                                ?.name || "-"}
                             </span>
                           </td>
                         </tr>
@@ -458,7 +458,7 @@ export function Overview() {
                   <div className="schedule-content">
                     <span className="schedule-time">
                       {s.start_time.slice(0, 5)}
-                      <span>—</span>
+                      <span> to </span>
                       {s.end_time.slice(0, 5)}
                     </span>
                     <h3>{s.name}</h3>
@@ -811,7 +811,7 @@ export function AttendancePage() {
             </div>
             <div className="table-footer">
               <span>
-                {current * 12 + 1}–{Math.min((current + 1) * 12, filtered.length)} of{" "}
+                {current * 12 + 1} to {Math.min((current + 1) * 12, filtered.length)} of{" "}
                 {filtered.length} records <small>· Latest 1,000 records</small>
               </span>
               <div className="pagination">
@@ -1326,7 +1326,7 @@ export function Requests() {
                       <strong>
                         {record
                           ? time(record.occurred_at, data.organization!.timezone)
-                          : "—"}
+                          : "-"}
                       </strong>
                     </span>
                     <ChevronRight size={17} />

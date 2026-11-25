@@ -54,7 +54,7 @@ Reruns reuse seed identities and the original sample dates, inserting only missi
 - **Overview:** today's check-ins, late arrivals, a seven-day chart, active shifts, and recent attendance.
 - **Attendance:** date, person, status, and workplace filters; pagination; CSV export of the filtered records; private photo access; and correction requests for your own records.
 - **Team:** email-bound invitations, withdrawal, and reversible deactivation. Administrator accounts cannot be deactivated through the employee endpoint.
-- **Locations:** GPS coordinates, configurable 20–2,000m boundary, printable SVG QR, and pause/resume.
+- **Locations:** GPS coordinates, a boundary radius of 20 to 2,000 meters, printable SVG QR, and pause/resume.
 - **Shifts:** recurring weekday schedules, bulk member assignment, overnight shifts, and pause/resume. Schedules are immutable: pause an old shift and create its replacement to preserve historical shift rules. Open check-ins may still check out against their original paused shift.
 - **Requests:** pending/approved/rejected views, review notes, and transactional approval. Approval updates the record while retaining the original time and audit details. An administrator cannot approve their own request.
 - **Reports:** completed work hours, person-days, late check-ins, on-time percentages, summary CSV, and an administrator-only audit trail.
