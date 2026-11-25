@@ -1,0 +1,19 @@
+:root {
+  --ink: #142d35;
+  --body: #344d55;
+  --muted: #496269;
+  --brand: #00655f;
+  --brand-hover: #004c49;
+  --brand-deep: #073d40;
+  --brand-soft: #dbefea;
+  --brand-wash: #edf6f3;
+  --canvas: #f3f6f5;
+  --line: #cedbd8;
+  --control-line: #768d89;
+  --success: #24603b;
+  --warning: #80500b;
+  --danger: #a33043;
+  --info: #205988;
+  --gold: #e6a72b;
+  --on-dark: #def4ee;
+}

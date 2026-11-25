@@ -203,7 +203,7 @@ export function Overview() {
       <section className="stats-grid">
         <Stat
           icon={<Users />}
-          tone="violet"
+          tone="teal"
           label={admin ? "Your people" : "My scheduled shifts"}
           value={admin ? people.length : data.assignments.length}
           detail={admin ? "People that make it happen" : "Assigned to you"}
@@ -985,7 +985,7 @@ export function Team() {
             .filter((i) => !i.accepted && !i.revoked)
             .map((i) => (
               <div className="invite-row" key={i.id}>
-                <span className="feature-icon violet">
+                <span className="feature-icon teal">
                   <Mail size={18} />
                 </span>
                 <div>
@@ -1163,10 +1163,10 @@ export function Shifts() {
         {data.shifts.map((s, i) => (
           <article className="panel shift-card" key={s.id}>
             <div className="shift-card-heading">
-              <span className={`feature-icon ${["violet", "amber", "green"][i % 3]}`}>
+              <span className={`feature-icon ${["teal", "amber", "green"][i % 3]}`}>
                 {i % 2 ? <Sun /> : <Clock3 />}
               </span>
-              <Badge tone={s.is_active ? "violet" : "gray"}>
+              <Badge tone={s.is_active ? "teal" : "gray"}>
                 {s.is_active ? "Recurring shift" : "Paused"}
               </Badge>
             </div>
@@ -1440,7 +1440,7 @@ export function Reports() {
         <Stat
           label="Completed work hours"
           icon={<Clock3 />}
-          tone="violet"
+          tone="teal"
           value={totalHours.toFixed(1)}
           detail="From paired check-ins and check-outs"
           foot="Open sessions are excluded"
@@ -1661,7 +1661,7 @@ export function SettingsPage() {
             <div>
               <strong>{me.full_name}</strong>
               <small>{me.email}</small>
-              <Badge tone="violet">
+              <Badge tone="teal">
                 {me.role === "admin" ? "Administrator" : "Team member"}
               </Badge>
             </div>

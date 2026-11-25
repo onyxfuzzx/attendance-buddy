@@ -238,7 +238,7 @@ export function Scanner() {
               : "Let’s get you checked in and on with your day."}
           </p>
         </div>
-        <Badge tone="violet">Checking {action === "in" ? "in" : "out"}</Badge>
+        <Badge tone="teal">Checking {action === "in" ? "in" : "out"}</Badge>
       </div>
       <div className="scanner-layout">
         <section className="panel scanner-panel">
@@ -434,7 +434,7 @@ export function Scanner() {
           )}
         </section>
         <aside className="checkin-aside">
-          <span className="feature-icon violet">
+          <span className="feature-icon teal">
             <ShieldCheck />
           </span>
           <h3>A check-in you can trust.</h3>

@@ -226,7 +226,7 @@ export function Forms({
           </div>
           <h3>{loc.name}</h3>
           <p>{loc.address}</p>
-          <Badge tone="violet">Within {loc.radius}m · Location verified</Badge>
+          <Badge tone="teal">Within {loc.radius}m · Location verified</Badge>
           <div className="qr-actions">
             <button className="primary" onClick={downloadQr}>
               <Download size={16} />

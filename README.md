@@ -5,7 +5,7 @@
 <p align="center"><strong>Less admin. More together.</strong><br />Open-source attendance for every kind of team.</p>
 <p align="center">
   <a href="https://github.com/onyxfuzzx/attendance-buddy/actions/workflows/ci.yml"><img src="https://github.com/onyxfuzzx/attendance-buddy/actions/workflows/ci.yml/badge.svg" alt="Build and tests" /></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-7864de.svg" alt="MIT license" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-00655f.svg" alt="MIT license" /></a>
   <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/Node.js-24_recommended-5a9478.svg" alt="Node.js 24 recommended" /></a>
 </p>
 <p align="center">

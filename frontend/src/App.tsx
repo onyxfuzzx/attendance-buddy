@@ -613,7 +613,7 @@ export default function App() {
               </div>
             ) : modal.kind === "notifications" ? (
               <div className="dialog-body">
-                <span className="feature-icon violet">
+                <span className="feature-icon teal">
                   <MessageSquareText />
                 </span>
                 <h3>
@@ -979,7 +979,7 @@ function Onboarding({
     <div className="onboarding">
       <Brand />
       <div className="panel">
-        <span className="feature-icon violet">
+        <span className="feature-icon teal">
           <Users />
         </span>
         <h1>{join ? "Find your people." : "Make room for your team."}</h1>

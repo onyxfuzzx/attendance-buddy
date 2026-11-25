@@ -30,7 +30,7 @@ await build({
 await writeFile(path.join(output, ".nojekyll"), "");
 await writeFile(
   path.join(output, "404.html"),
-  `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Page not found · Attendance Buddy</title><body style="font-family:system-ui;max-width:36rem;margin:15vh auto;padding:2rem;color:#302b49"><h1>Let’s get you back to your people.</h1><p>This page doesn’t exist.</p><a href="${base}">Return to Attendance Buddy</a></body></html>`,
+  `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Page not found · Attendance Buddy</title><body style="font-family:system-ui;max-width:36rem;margin:15vh auto;padding:2rem;color:#142d35"><h1>Let’s get you back to your people.</h1><p>This page doesn’t exist.</p><a href="${base}">Return to Attendance Buddy</a></body></html>`,
 );
 await mkdir(path.join(output, "licenses"), { recursive: true });
 for (const font of ["dm-sans", "manrope"])
