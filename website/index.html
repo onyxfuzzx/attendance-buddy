@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#7661dd" />
+    <meta
+      name="description"
+      content="Your people. Your places. In sync. Attendance Buddy is an open-source attendance workspace with QR check-ins, location verification, and a little less admin."
+    />
+    <meta property="og:title" content="Attendance Buddy — less admin, more together." />
+    <meta
+      property="og:description"
+      content="Open-source attendance for every kind of team. Explore the demo, make it yours, and keep your data in your own Supabase project."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://onyxfuzzx.github.io/attendance-buddy/" />
+    <link rel="canonical" href="https://onyxfuzzx.github.io/attendance-buddy/" />
+    <link rel="icon" href="./brand.svg" type="image/svg+xml" />
+    <title>Attendance Buddy · Less admin, more together.</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header wrap">
+      <a class="brand" href="#" aria-label="Attendance Buddy home"
+        ><span class="brand-mark"
+          ><svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m5 12 4 4L19 6" /></svg></span
+        ><span
+          >attendance<br /><b>buddy<span>.</span></b></span
+        ></a
+      >
+      <button
+        class="menu-toggle"
+        aria-expanded="false"
+        aria-controls="navigation"
+        aria-label="Open navigation"
+      >
+        <span></span><span></span>
+      </button>
+      <nav id="navigation" aria-label="Main navigation">
+        <a href="#product">The product</a><a href="#how-it-works">How it works</a
+        ><a href="#developers">For developers</a
+        ><a class="nav-github" href="https://github.com/onyxfuzzx/attendance-buddy"
+          ><svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M9 19c-4.3 1.3-4.3-2-6-2.5M15 22v-3.4c0-1 .1-1.7-.5-2.3 3.3-.4 6.7-1.6 6.7-7.3A5.7 5.7 0 0 0 19.7 5a5.3 5.3 0 0 0-.2-4s-1.3-.4-4.5 1.5a15.6 15.6 0 0 0-8 0C3.8.6 2.5 1 2.5 1a5.3 5.3 0 0 0-.2 4A5.7 5.7 0 0 0 .8 9c0 5.7 3.4 6.9 6.7 7.3-.5.6-.6 1.3-.5 2.3V22"
+              transform="translate(1 0) scale(.9)"
+            /></svg
+          >View on GitHub</a
+        >
+      </nav>
+    </header>
+    <main id="main">
+      <section class="hero wrap" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <span class="eyebrow"><i></i> OPEN SOURCE. PEOPLE FIRST.</span>
+          <h1 id="hero-title">
+            Less admin.<br />More <em>together.</em
+            ><span class="title-spark" aria-hidden="true">✦</span>
+          </h1>
+          <p>
+            Good teams have better things to do than chase check-ins. Bring your people,
+            places, and time into one happy workspace.
+          </p>
+          <div class="hero-buttons">
+            <a class="button primary" href="./demo/"
+              ><span class="tiny-scan" aria-hidden="true">⌗</span>Meet your new buddy</a
+            ><a class="button secondary" href="#developers">Make it yours</a>
+          </div>
+          <div class="hero-note">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6" /></svg
+            >Free to use. Yours to host. Built in the open.
+          </div>
+        </div>
+        <div class="hero-scene" aria-label="Interactive sample attendance overview">
+          <span class="scene-spark spark-one" aria-hidden="true">✦</span
+          ><span class="scene-spark spark-two" aria-hidden="true">✧</span>
+          <div class="floating-note">
+            <span class="note-check">✓</span
+            ><span
+              ><strong>Good morning, team!</strong
+              ><small>A little check. A great start.</small></span
+            ><span aria-hidden="true">☀</span>
+          </div>
+          <div class="product-window">
+            <div class="window-chrome">
+              <span><i></i><i></i><i></i></span><small>YOUR TEAM, IN SYNC</small
+              ><span class="window-avatar">AM</span>
+            </div>
+            <div class="mini-app">
+              <aside class="mini-sidebar" aria-hidden="true">
+                <span class="mini-logo">✓</span><b>▦</b><span>▤</span><span>♧</span
+                ><span>◷</span><span>⌾</span><span class="mini-sidebar-bottom">⚙</span>
+              </aside>
+              <div class="mini-content">
+                <div class="mini-heading">
+                  <div>
+                    <small>LET’S MAKE TODAY A GOOD ONE</small>
+                    <h2>Hey Alex, looking good <span>✦</span></h2>
+                  </div>
+                  <span class="mini-date">The Studio · HQ</span>
+                </div>
+                <div class="mini-stats">
+                  <div>
+                    <span><i class="stat-icon green">✓</i>Checked in</span
+                    ><strong id="sample-count">8<span>/12</span></strong
+                    ><small>Good work starts here</small>
+                  </div>
+                  <div>
+                    <span><i class="stat-icon purple">◷</i>On-time rate</span
+                    ><strong>94<span>%</span></strong
+                    ><small>Sample workspace</small>
+                  </div>
+                  <div>
+                    <span><i class="stat-icon amber">☀</i>A little late</span
+                    ><strong>01</strong><small>A little grace goes a long way</small>
+                  </div>
+                </div>
+                <div class="mini-chart">
+                  <div>
+                    <strong>Showing up, together</strong
+                    ><span>● On time <i>● Late</i></span>
+                  </div>
+                  <div class="sample-bars" aria-hidden="true">
+                    <i style="--h: 65%"></i><i style="--h: 85%"></i
+                    ><i style="--h: 75%"></i><i style="--h: 92%"></i
+                    ><i style="--h: 81%"></i><i style="--h: 95%"></i
+                    ><i style="--h: 68%"></i>
+                  </div>
+                  <div class="sample-days" aria-hidden="true">
+                    <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span
+                    ><span>S</span><span>S</span>
+                  </div>
+                </div>
+                <div class="mini-person">
+                  <span class="avatar coral">PS</span
+                  ><span
+                    ><strong>Priya Sharma</strong><small>Design · The Studio</small></span
+                  ><span class="mini-person-status" id="sample-status">Not in yet</span>
+                </div>
+                <button class="sample-checkin" id="sample-checkin">
+                  <span>✓</span>Try a little check-in
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="scene-footer">
+            <span class="people-stack"><i>AM</i><i>PS</i><i>DK</i></span
+            ><span>Every check-in has a person behind it.</span
+            ><span aria-hidden="true">✦</span>
+          </div>
+          <small class="sample-disclaimer"
+            >Illustrative sample data · try the button</small
+          >
+        </div>
+      </section>
+      <section class="stack-strip wrap" aria-label="Technology stack">
+        <span>A SMALL STACK.<br /><strong>A LOT OF POSSIBILITY.</strong></span>
+        <div><span class="tech-react">⚛</span>React</div>
+        <div><span class="tech-ts">TS</span>TypeScript</div>
+        <div><span class="tech-express">ex</span>Express</div>
+        <div><span class="tech-supabase">ϟ</span>Supabase</div>
+        <span class="stack-end">Your people.<br />Your database. Your rules.</span>
+      </section>
+
+      <section class="product-section wrap" id="product">
+        <div class="section-intro">
+          <span class="eyebrow">THE LITTLE THINGS, TAKEN CARE OF</span>
+          <h2>Everything in its place.<br /><em>Everyone in the loop.</em></h2>
+          <p>
+            From the first hello to the end-of-day check-out. A thoughtful flow for teams
+            of every kind.
+          </p>
+        </div>
+        <div class="bento-grid">
+          <article class="bento team-bento">
+            <div class="bento-copy">
+              <span class="feature-label">01 / YOUR PEOPLE</span>
+              <h3>One team. <br />Room for everyone.</h3>
+              <p>
+                Invite your people, assign their shifts, and make the everyday a little
+                easier. Admin and employee views keep the right things in the right hands.
+              </p>
+            </div>
+            <div class="team-illustration" aria-label="Example team members">
+              <div>
+                <span class="avatar coral">PS</span
+                ><span><b>Priya Sharma</b><small>Design</small></span
+                ><i>Team member</i>
+              </div>
+              <div>
+                <span class="avatar blue">DK</span
+                ><span><b>Daniel Kim</b><small>Engineering</small></span
+                ><i>Team member</i>
+              </div>
+              <div>
+                <span class="avatar green">AM</span
+                ><span><b>Alex Morgan</b><small>People & Culture</small></span
+                ><i>Admin</i>
+              </div>
+            </div>
+          </article>
+          <article class="bento location-bento">
+            <div class="map-art" aria-hidden="true">
+              <span class="map-road road-one"></span
+              ><span class="map-road road-two"></span><span class="map-park"></span
+              ><span class="map-radius"><b>⌾</b></span
+              ><span class="map-chip">✓ Right place. Right you.</span>
+            </div>
+            <div class="bento-copy">
+              <span class="feature-label">02 / YOUR PLACES</span>
+              <h3>Good work happens here.</h3>
+              <p>
+                A workplace QR and GPS boundary give each check-in a real place to belong.
+              </p>
+            </div>
+          </article>
+          <article class="bento rhythm-bento">
+            <div class="bento-copy">
+              <span class="feature-label">03 / YOUR RHYTHM</span>
+              <h3>Better days start <br />with a little structure.</h3>
+              <p>
+                Recurring schedules, overnight shifts, and a 15-minute grace period. Made
+                for the way your team works.
+              </p>
+            </div>
+            <div class="shift-illustration">
+              <div><span>◷</span><b>The everyday shift</b><i>09:00 — 18:00</i></div>
+              <div class="week-strip" aria-label="Sample Monday to Friday schedule">
+                <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span
+                ><span class="off">S</span><span class="off">S</span>
+              </div>
+              <small>Clear schedules. A little breathing room.</small>
+            </div>
+          </article>
+          <article class="bento details-bento">
+            <div class="bento-copy">
+              <span class="feature-label">04 / THE BIGGER PICTURE</span>
+              <h3>Keep the little <br />details right.</h3>
+              <p>
+                Review corrections with context, export useful reports, and follow the
+                audit trail. Less guesswork. More clarity.
+              </p>
+            </div>
+            <div class="request-illustration">
+              <span class="request-icon">✓</span>
+              <div>
+                <b>A little context makes it clear.</b
+                ><small>Attendance correction · sample request</small
+                ><span>Reviewed & recorded</span>
+              </div>
+              <i>✦</i>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="flow-section" id="how-it-works">
+        <div class="wrap flow-grid">
+          <div>
+            <span class="eyebrow">A GOOD DAY STARTS HERE</span>
+            <h2>One small check-in.<br /><em>Then, on with your day.</em></h2>
+            <p class="flow-description">
+              A simple routine for your people, with the important checks happening behind
+              the scenes.
+            </p>
+            <div class="flow-tabs" role="tablist" aria-label="Check-in steps">
+              <button
+                id="step-tab-0"
+                class="selected"
+                role="tab"
+                aria-selected="true"
+                aria-controls="step-panel"
+                data-step="0"
+              >
+                <span>01</span>
+                <div>
+                  <strong>Say hello to your workplace.</strong
+                  ><small>Scan its QR or enter the workplace code.</small>
+                </div>
+                <b>⌗</b></button
+              ><button
+                id="step-tab-1"
+                role="tab"
+                aria-selected="false"
+                aria-controls="step-panel"
+                tabindex="-1"
+                data-step="1"
+              >
+                <span>02</span>
+                <div>
+                  <strong>Right place. Right you.</strong
+                  ><small>Verify your location within the boundary.</small>
+                </div>
+                <b>⌾</b></button
+              ><button
+                id="step-tab-2"
+                role="tab"
+                aria-selected="false"
+                aria-controls="step-panel"
+                tabindex="-1"
+                data-step="2"
+              >
+                <span>03</span>
+                <div>
+                  <strong>One little check. All done.</strong
+                  ><small>Confirm your check-in and get to the good stuff.</small>
+                </div>
+                <b>✓</b>
+              </button>
+            </div>
+          </div>
+          <div class="flow-visual">
+            <span class="flow-star" aria-hidden="true">✦</span>
+            <div
+              class="checkin-card"
+              id="step-panel"
+              role="tabpanel"
+              aria-labelledby="step-tab-0"
+              tabindex="0"
+            >
+              <div class="card-topline">
+                <span class="small-brand">✓</span><small>ATTENDANCE BUDDY</small
+                ><span>✦</span>
+              </div>
+              <div class="step-symbol" id="step-symbol" aria-hidden="true">⌗</div>
+              <span class="step-eyebrow" id="step-eyebrow">YOUR WORKPLACE</span>
+              <h3 id="step-title">A familiar place.<br />A fresh start.</h3>
+              <p id="step-description">
+                The workplace QR connects your attendance to the right location and team.
+              </p>
+              <div class="verification-row">
+                <span id="step-icon">⌾</span>
+                <div>
+                  <strong id="step-location">The Studio · HQ</strong
+                  ><small id="step-detail">Workplace identified</small>
+                </div>
+                <i>✓</i>
+              </div>
+              <div class="card-progress" aria-hidden="true">
+                <i class="complete"></i><i></i><i></i>
+              </div>
+              <small class="illustration-label">Check-in flow illustration</small>
+            </div>
+            <p class="privacy-note">
+              <span>♧</span> Your location is captured at check-in and check-out.<br />No
+              background tracking.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="developer-section wrap" id="developers">
+        <div class="developer-copy">
+          <span class="eyebrow">YOUR STACK. YOUR WORKSPACE.</span>
+          <h2>A little code.<br /><em>A lot of ownership.</em></h2>
+          <p>
+            Attendance Buddy is MIT-licensed, self-hostable, and built with familiar
+            tools. Bring your own Supabase project. Keep control of your data.
+          </p>
+          <ul>
+            <li><span>✓</span>React + TypeScript on the frontend</li>
+            <li><span>✓</span>Express API with validated requests</li>
+            <li><span>✓</span>PostgreSQL policies and checked transactions</li>
+            <li><span>✓</span>Private photo storage and an audit trail</li>
+          </ul>
+          <a
+            class="text-link"
+            href="https://github.com/onyxfuzzx/attendance-buddy/blob/main/docs/SETUP.md"
+            >Read the setup guide <span aria-hidden="true">↗</span></a
+          >
+        </div>
+        <div class="terminal">
+          <div class="terminal-top">
+            <span><i></i><i></i><i></i></span><span>hello, attendance-buddy</span
+            ><button id="copy-command" aria-label="Copy quick-start commands">
+              Copy
+            </button>
+          </div>
+          <pre><code><span class="code-comment"># A workspace that’s actually yours.</span>
+<span class="code-prompt">$</span> git clone https://github.com/onyxfuzzx/attendance-buddy.git
+<span class="code-prompt">$</span> cd attendance-buddy
+<span class="code-prompt">$</span> npm ci
+<span class="code-prompt">$</span> npm run dev
+
+<span class="code-comment"># Open localhost. Meet your new buddy.</span>
+<span class="code-success">✓ React ready</span>       <span class="code-muted">127.0.0.1:5173</span>
+<span class="code-success">✓ Express ready</span>     <span class="code-muted">127.0.0.1:3001</span>
+
+<span class="code-comment"># No keys? Try the browser-local demo.</span>
+<span class="code-comment"># Ready for real data? Connect Supabase.</span></code></pre>
+          <div class="terminal-bottom">
+            <span class="terminal-dot"></span>Node.js 24 recommended
+            <span>MIT licensed</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="faq-section wrap" id="questions">
+        <div>
+          <span class="eyebrow">A FEW LITTLE DETAILS</span>
+          <h2>Glad you asked.</h2>
+          <p>Here’s what to know before<br />you bring your team along.</p>
+        </div>
+        <div class="faqs">
+          <details open>
+            <summary>Is this really free and open source?<span>+</span></summary>
+            <p>
+              Yes. The code is available under the MIT license. You can use, modify, and
+              self-host it, including for commercial teams. Your hosting and Supabase
+              usage may have their own costs.
+            </p>
+          </details>
+          <details>
+            <summary>Is the public demo connected to a real team?<span>+</span></summary>
+            <p>
+              No. The demo uses fictional people and browser-local sample data. It does
+              not connect to our Supabase project. Its QR, shift, and GPS behavior is
+              simulated; the connected application verifies these on the server.
+            </p>
+          </details>
+          <details>
+            <summary>Can I run the entire app on GitHub Pages?<span>+</span></summary>
+            <p>
+              GitHub Pages hosts this project website and the static demo. A live
+              workspace also needs the Express backend and your own Supabase project. The
+              setup guide covers local development and deployment.
+            </p>
+          </details>
+          <details>
+            <summary>What if someone forgets to check in?<span>+</span></summary>
+            <p>
+              Team members can request a correction to an existing attendance record. An
+              administrator reviews the reason and proposed time. Approved changes keep
+              the original time and an audit history.
+            </p>
+          </details>
+          <details>
+            <summary>Will it work for my kind of team?<span>+</span></summary>
+            <p>
+              It supports location-based teams with administrators, employees, workplaces,
+              and recurring shifts, including overnight schedules. It does not currently
+              include leave management, payroll calculations, or device attestation.
+            </p>
+          </details>
+        </div>
+      </section>
+
+      <section class="open-section wrap">
+        <div class="open-art" aria-hidden="true">
+          <span>✦</span><i>✓</i><span>✧</span>
+        </div>
+        <span class="eyebrow">GOOD THINGS ARE BETTER TOGETHER</span>
+        <h2>Built in the open.<br /><em>Better with you.</em></h2>
+        <p>Try it. Make it yours. Help make someone’s workday a little easier.</p>
+        <div>
+          <a class="button primary" href="./demo/">Explore the workspace</a
+          ><a
+            class="button secondary"
+            href="https://github.com/onyxfuzzx/attendance-buddy"
+            >Get the source</a
+          >
+        </div>
+        <small
+          >Found a little thing to improve?
+          <a
+            href="https://github.com/onyxfuzzx/attendance-buddy/blob/main/CONTRIBUTING.md"
+            >You’re in good company.</a
+          ></small
+        >
+      </section>
+    </main>
+    <footer class="site-footer wrap">
+      <a class="brand footer-brand" href="#" aria-label="Attendance Buddy home"
+        ><span class="brand-mark">✓</span
+        ><span
+          >attendance<br /><b>buddy<span>.</span></b></span
+        ></a
+      >
+      <p>
+        Less paperwork. More people.<small
+          >© <span id="year">2026</span> onyxfuzzx & contributors · MIT licensed</small
+        >
+      </p>
+      <nav aria-label="Footer navigation">
+        <a href="https://github.com/onyxfuzzx/attendance-buddy">GitHub</a
+        ><a href="https://github.com/onyxfuzzx/attendance-buddy/blob/main/docs/SETUP.md"
+          >Docs</a
+        ><a href="https://github.com/onyxfuzzx/attendance-buddy/issues">Issues</a
+        ><a href="https://github.com/onyxfuzzx/attendance-buddy/blob/main/LICENSE"
+          >License</a
+        >
+      </nav>
+    </footer>
+    <div class="site-toast" id="site-toast" role="status" aria-live="polite"></div>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

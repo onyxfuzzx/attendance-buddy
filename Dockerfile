@@ -15,6 +15,7 @@ RUN npm run build
 FROM node:24-alpine
 WORKDIR /app
 ENV NODE_ENV=production PORT=3001 HOST=0.0.0.0
+COPY LICENSE ./LICENSE
 COPY package.json package-lock.json ./
 COPY frontend/package.json frontend/package.json
 COPY backend/package.json backend/package.json

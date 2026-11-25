@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Setup and deployment
+    url: https://github.com/onyxfuzzx/attendance-buddy/blob/main/docs/SETUP.md
+    about: Start with the setup guide for configuration questions.
+  - name: Security reports
+    url: https://github.com/onyxfuzzx/attendance-buddy/blob/main/SECURITY.md
+    about: Read the private-reporting guidance before disclosing vulnerabilities.

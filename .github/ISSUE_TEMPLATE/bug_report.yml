@@ -1,0 +1,25 @@
+name: Bug report
+description: Tell us what went wrong and how to reproduce it.
+labels: [bug]
+body:
+  - type: textarea
+    id: behavior
+    attributes:
+      label: What happened?
+      description: Describe the actual behavior and what you expected. Do not include credentials or real attendance data.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: How can we reproduce it?
+      description: Provide steps using synthetic data.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: Browser, OS, Node version, and commit/version
+    validations:
+      required: true

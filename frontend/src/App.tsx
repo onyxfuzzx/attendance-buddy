@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import {
   LayoutDashboard,
   CalendarCheck,
@@ -60,13 +60,17 @@ const getPage = (): Page => {
     ? (name as Page)
     : "Overview";
 };
+const demoOnly = import.meta.env.VITE_DEMO_ONLY;
 export default function App() {
-  const [demo, setDemo] = useState(() => sessionStorage.getItem("buddy-mode") === "demo");
+  const [demo, setDemo] = useState(
+    () => demoOnly || sessionStorage.getItem("buddy-mode") === "demo",
+  );
   const [authenticated, setAuthenticated] = useState(false);
   const [recovery, setRecovery] = useState(() => location.hash.includes("type=recovery"));
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<Workspace | null>(null);
   const [error, setError] = useState("");
+  const workspaceRequest = useRef(0);
   const [page, setPageState] = useState<Page>(getPage);
   const [modal, setModal] = useState<{ kind: string; id?: string } | null>(null);
   const [toast, setToast] = useState<{
@@ -80,18 +84,23 @@ export default function App() {
     [],
   );
   const reload = useCallback(async () => {
+    const request = ++workspaceRequest.current;
     if (demo) {
       setData(loadDemo());
+      setError("");
       setLoading(false);
       return;
     }
     try {
-      setData(await api<Workspace>("/workspace"));
-      setError("");
+      const workspace = await api<Workspace>("/workspace");
+      if (request === workspaceRequest.current) {
+        setData(workspace);
+        setError("");
+      }
     } catch (e) {
-      setError((e as Error).message);
+      if (request === workspaceRequest.current) setError((e as Error).message);
     } finally {
-      setLoading(false);
+      if (request === workspaceRequest.current) setLoading(false);
     }
   }, [demo]);
   useEffect(() => {
@@ -105,26 +114,46 @@ export default function App() {
       return;
     }
     let active = true;
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (active) {
-        setAuthenticated(!!session);
-        if (session) void reload();
-        else setLoading(false);
+    let initialized = false;
+    let sessionUserId: string | null = null;
+    let loadTimer: ReturnType<typeof setTimeout> | undefined;
+    const syncSession = (userId: string | null) => {
+      if (!active || (initialized && userId === sessionUserId)) return;
+      initialized = true;
+      sessionUserId = userId;
+      // A changed identity invalidates any workspace response still in flight.
+      workspaceRequest.current++;
+      clearTimeout(loadTimer);
+      setData(null);
+      setError("");
+      setAuthenticated(!!userId);
+      setLoading(!!userId);
+      if (userId) {
+        // Keep Supabase calls outside its auth-event callback and session lock.
+        loadTimer = setTimeout(() => {
+          if (active) void reload();
+        }, 0);
       }
-    });
+    };
+    supabase.auth
+      .getSession()
+      .then(({ data: { session } }) => {
+        if (!initialized) syncSession(session?.user.id ?? null);
+      })
+      .catch(() => {
+        if (!initialized) syncSession(null);
+      });
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!active) return;
       if (_event === "PASSWORD_RECOVERY") setRecovery(true);
-      setAuthenticated(!!session);
-      if (session) setTimeout(() => void reload(), 0);
-      else {
-        setData(null);
-        setLoading(false);
-      }
+      syncSession(session?.user.id ?? null);
     });
     return () => {
       active = false;
+      workspaceRequest.current++;
+      clearTimeout(loadTimer);
       subscription.unsubscribe();
     };
   }, [demo, reload]);
@@ -269,6 +298,10 @@ export default function App() {
     setData(next);
   }
   async function logout() {
+    if (demoOnly) {
+      window.location.assign(new URL("../", window.location.href));
+      return;
+    }
     if (demo) {
       sessionStorage.removeItem("buddy-mode");
       setDemo(false);
@@ -291,7 +324,7 @@ export default function App() {
       </button>
     </div>
   );
-  if (loading)
+  if (loading || (authenticated && !data && !error))
     return (
       <div className="boot">
         <Brand />
@@ -493,8 +526,19 @@ export default function App() {
                 <span className="demo-dot" />
                 You’re exploring the demo workspace. Changes are saved on this device.
               </span>
-              <button onClick={() => open("connect")}>
-                Connect your workspace <ChevronRight size={13} />
+              <button
+                onClick={() =>
+                  demoOnly
+                    ? window.open(
+                        "https://github.com/onyxfuzzx/attendance-buddy#quick-start",
+                        "_blank",
+                        "noopener,noreferrer",
+                      )
+                    : open("connect")
+                }
+              >
+                {demoOnly ? "Get the open-source app" : "Connect your workspace"}{" "}
+                <ChevronRight size={13} />
               </button>
             </div>
           )}

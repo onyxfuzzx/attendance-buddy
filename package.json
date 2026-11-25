@@ -1,6 +1,13 @@
 {
   "name": "attendance-buddy",
   "version": "1.0.0",
+  "description": "Open-source QR and location-verified attendance for every team.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/onyxfuzzx/attendance-buddy.git"
+  },
+  "homepage": "https://onyxfuzzx.github.io/attendance-buddy/",
   "private": true,
   "workspaces": [
     "frontend",
@@ -13,6 +20,10 @@
     "test:ui": "playwright test",
     "supabase:check": "node scripts/check-supabase.mjs",
     "seed:test": "node scripts/seed-supabase.mjs",
+    "build:pages": "node scripts/build-pages.mjs",
+    "dev:website": "vite website --host 127.0.0.1 --port 4174",
+    "preview:pages": "vite preview --outDir dist/pages --base /attendance-buddy/ --host 127.0.0.1 --port 4174",
+    "test:pages": "playwright test --config playwright.pages.config.ts",
     "start": "npm run start -w backend"
   },
   "devDependencies": {

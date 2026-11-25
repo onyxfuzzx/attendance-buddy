@@ -1,6 +1,4 @@
 Reference/
-WatchmanAttendance.API/
-WatchmanAttendance.UI/
 node_modules/
 .npm-cache/
 **/dist/

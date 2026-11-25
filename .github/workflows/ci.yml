@@ -12,7 +12,11 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm test
+      - run: npm run build:pages
       - run: npx playwright install --with-deps chromium
       - run: npm run test:ui
+        env:
+          CI: true
+      - run: npm run test:pages
         env:
           CI: true
